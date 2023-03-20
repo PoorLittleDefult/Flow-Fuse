@@ -1,0 +1,197 @@
+:root{
+    font-family: 'Apercu Pro', sans-serif;
+}
+
+body,html{
+  overflow: hidden;
+}
+
+body{
+    background: url(./background.png);
+    color: #333;
+    background-size: cover;
+    background-position: 0% 0%;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+/* header */
+
+header{
+    /* background-color: #000000; */
+    height: 10vh;
+    top: 0;
+    width: 100%;
+    position: absolute;
+}
+
+nav {
+    /* background-color: blue; */
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    height: 10vh;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+
+nav a{
+    list-style: none;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 200;
+}
+
+.left{
+    position: absolute;
+    left: 0;
+    top: 50%;    
+    transform: translate(0%, -50%);
+    word-spacing: 30px;
+}
+
+.right{
+    position: absolute;
+    right: 0;
+    top: 50%;    
+    transform: translate(0%, -50%);
+    word-spacing: 30px;
+}
+
+.middle{
+    position: absolute;
+    left: 50%;
+    top: 50%;    
+    transform: translate(-50%, -50%);
+}
+
+h2{
+    list-style: none;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 200;
+}
+
+.right-h3{
+    list-style: none;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 200;
+}
+
+.middle-h3{
+  position: relative;
+  color: #ffff;
+  text-align: center;
+  letter-spacing: 18px;
+  font-size: 20px;
+}
+
+h1{
+    color: #ffff;
+    text-align: center;
+    letter-spacing: 20px;
+    font-size: 50px;
+    text-shadow: 7px 7px rgba(255, 255, 255, 0.2);
+}
+
+@media screen and (max-width: 550px) {
+
+  .right{
+    display: none;
+  }
+
+  nav{
+    display: none;
+  }
+
+  h1{
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
+.middle-h3{
+  font-size: 2vw;
+  letter-spacing: 5px;
+}
+}
+
+.h1-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+
+/* ----------------------------------------------- hamburger ------------------------------------------------- */
+
+/* .container {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+  }
+   */
+  
+  .btn3 {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 50px;
+    margin: 10px;
+    z-index: 999;
+    transition-duration: 0.5s;
+  }
+  .btn3 .icon {
+    transition-duration: 0.5s;
+    position: absolute;
+    height: 0px;
+    width: 40px;
+    top: 30px;
+    background-color: #ffffff;
+  }
+  .btn3 .icon:before {
+    transition-duration: 0.5s;
+    position: absolute;
+    width: 40px;
+    height: 6px;
+    background-color: #ffffff;
+    content: "";
+    top: -20px;
+    border-radius: 10px;
+  }
+  .btn3 .icon:after {
+    transition-duration: 0.5s;
+    position: absolute;
+    width: 30px;
+    height: 6px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    content: "";
+    top: 0px;
+  }
+  .btn3.open .icon {
+    transition-duration: 0.5s;
+  }
+  .btn3.open .icon:before {
+    transform: rotateZ(135deg) scaleX(1.25) translate(13px, -13px);
+  }
+  .btn3.open .icon:after {
+    transform: rotateZ(-135deg) scaleX(1.25) translate(0px, 0px);
+    width: 40px;
+  }
+  .btn3:hover {
+    cursor: pointer;
+  }
+  
+ 
