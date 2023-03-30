@@ -53,7 +53,7 @@ nav a{
     left: 0;
     top: 50%;    
     transform: translate(0%, -50%);
-    word-spacing: 30px;
+    word-spacing: 50px;
 }
 
 .right{
@@ -61,7 +61,7 @@ nav a{
     right: 0;
     top: 50%;    
     transform: translate(0%, -50%);
-    word-spacing: 30px;
+    word-spacing: 50px;
 }
 
 .middle{
@@ -91,7 +91,7 @@ h2{
   position: relative;
   color: #ffff;
   text-align: center;
-  letter-spacing: 18px;
+  letter-spacing: 15px;
   font-size: 20px;
 }
 
