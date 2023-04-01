@@ -1,5 +1,18 @@
 {% extends 'index.html' %} {% block content %}
 
-
+<table class="w3-table-all">
+    <tr>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.item_name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.price }}</td>
+    </tr>
+</table>
+{% endfor %}
 
 {% endblock %}
