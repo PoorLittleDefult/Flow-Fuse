@@ -1,0 +1,14 @@
+<h1>Add a new item</h1>
+
+<form method="POST" action="{{ url_for('new_item') }}">
+    <label for="item_name">Item name:</label>
+    <input type="text" name="item_name" required>
+
+    <label for="category">Category:</label>
+    <input type="text" name="category" required>
+
+    <label for="price">Price:</label>
+    <input type="number" step="0.01" name="price" required>
+
+    <input type="submit" value="Add item">
+</form>
