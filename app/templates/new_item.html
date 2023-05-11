@@ -1,6 +1,10 @@
-<h1>Add a new item</h1>
+{% extends 'index.html' %} {% block content %}
+
+
+
 
 <form method="POST" action="{{ url_for('new_item') }}">
+    <h2>Add a new item</h2>
     <label for="item_name">Item name:</label>
     <input type="text" name="item_name" required>
 
@@ -12,3 +16,6 @@
 
     <input type="submit" value="Add item">
 </form>
+
+
+{% endblock %}

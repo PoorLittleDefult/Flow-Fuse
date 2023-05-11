@@ -22,5 +22,9 @@ def new_item():
         item = Item(item_name=item_name, category=category, price=price)
         db.session.add(item)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('product'))
     return render_template('new_item.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
