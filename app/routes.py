@@ -2,6 +2,9 @@ from app import app, db
 from app import models
 from flask import render_template, redirect, request, url_for
 from app.models import Item
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.exceptions import HTTPException
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -28,3 +31,22 @@ def new_item():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
+
+
+@app.route('/error')
+def error():
+    return render_template("404.html")
+
+# Error handler
+@app.errorhandler(HTTPException)
+def handle_error(error):
+    response = {
+        "code": error.code,
+        "name": error.name,
+        "description": error.description,
+    }
+    
+    return render_template(
+        "404.html",
+        response=response
+    )
