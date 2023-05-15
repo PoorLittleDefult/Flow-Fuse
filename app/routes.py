@@ -1,9 +1,14 @@
 from app import app, db
 from app import models
-from flask import render_template, redirect, request, url_for
-from app.models import Item
+from flask import render_template, redirect, request, url_for, session, logging, flash
+from app.models import Item, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
+from sqlalchemy.orm import scoped_session,sessionmaker
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import create_engine
+from passlib.hash import sha256_crypt
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -28,10 +33,33 @@ def new_item():
         return redirect(url_for('product'))
     return render_template('new_item.html')
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        print(email)
+        fullname = request.form['fullname']
+        phone = request.form['phone']
+        # Hash the password before storing it in the database
+        hashed_password = generate_password_hash(password)
+        user = User(username=username, password=hashed_password, email=email, fullname=fullname, phone=phone)
+        db.session.add(user)
+        try:
+            db.session.commit()
+            flash('Registration successful!', 'success')
+            return redirect(url_for('home'))
+        except IntegrityError:
+            db.session.rollback()
+            flash('Username already exists. Please choose a different username.', 'danger')
+
+    return render_template('signup.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
-
 
 @app.route('/error')
 def error():
