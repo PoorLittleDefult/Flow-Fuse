@@ -14,6 +14,12 @@ class User(db.Model):
     fullname = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
 
+    def is_active(self):
+        return True  
+    
+    def get_id(self):
+        return str(self.id)
+
     def __repr__(self):
         return f"<User {self.username}>"
 

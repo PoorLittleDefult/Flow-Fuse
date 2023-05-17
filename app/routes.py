@@ -2,6 +2,7 @@ from app import app, db
 from app import models
 from flask import render_template, redirect, request, url_for, session, logging, flash
 from app.models import Item, User
+from flask_login import login_user, current_user, LoginManager, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
 from sqlalchemy.orm import scoped_session,sessionmaker
@@ -9,7 +10,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine
 from passlib.hash import sha256_crypt
 
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -59,7 +66,24 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)  # Log in the user
+
+            flash('Login successful!', 'success')
+            print(user.username)
+            print(user.password)
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password', 'danger')
+            print('Invalid username or password', 'danger')
+
     return render_template('login.html')
+
 
 @app.route('/error')
 def error():
