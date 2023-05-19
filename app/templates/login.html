@@ -1,6 +1,6 @@
 {% extends 'index.html' %} {% block content %}
     
-  <div class="container">
+  <div class="container-login">
     <div class="title">Login</div>
     <div class="content">
       <form action="{{ url_for('login') }}" method="POST">
@@ -17,6 +17,9 @@
         <div class="button">
           <input type="submit" value="Login">
         </div>
+        {% if error %}
+            <p style="font-size: 18px; margin-top: -2%; text-align: center; color:rgb(0, 183, 255)" class="error"><strong style="position: relative;">Error:</strong> {{error}}</p>
+        {% endif %}
       </form>
     </div>
   </div>

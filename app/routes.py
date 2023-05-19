@@ -79,8 +79,8 @@ def login():
             print(user.password)
             return redirect(url_for('home'))
         else:
-            flash('Invalid username or password', 'danger')
-            print('Invalid username or password', 'danger')
+            return redirect('/login?error=Incorrect Login Details')
+            # print('Invalid username or password', 'danger')
 
     return render_template('login.html')
 
