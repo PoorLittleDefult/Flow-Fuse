@@ -59,7 +59,7 @@ def signup():
             return redirect(url_for('home'))
         except IntegrityError:
             db.session.rollback()
-            flash('Username already exists. Please choose a different username.', 'danger')
+            flash('Username already exists. Please choose a different username.')
 
     return render_template('signup.html')
 
