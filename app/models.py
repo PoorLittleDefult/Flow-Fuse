@@ -2,8 +2,10 @@ from app import db
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    item_name = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
     price = db.Column(db.Numeric, nullable=False)
 
 class User(db.Model):

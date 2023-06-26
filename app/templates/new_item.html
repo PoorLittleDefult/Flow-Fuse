@@ -1,19 +1,27 @@
 {% extends 'index.html' %} {% block content %}
 
 
-<form method="POST" action="{{ url_for('new_item') }}">
-    <h2>Add a new item</h2>
+<form class="form-create" id="form-create" method="POST" action="{{ url_for('new_item') }}">
+    <h2>ITEM FORGE</h2>
+    <div class="form-create-container">
+
     <label for="item_name">Item name:</label>
     <input type="text" name="item_name" maxlength="20" required>
 
     <label for="category">Category:</label>
     <input type="text" name="category" required>
 
+    <label for="Description">Description:</label>
+    <textarea rows="4" cols="50" name="comment" form="form-create" required>
+    Enter text here...</textarea>
+
     <label for="price">Price:</label>
     <input type="number" step="0.01" name="price" min="0" max="9999999" required>
 
     <input type="submit" value="Add item">
+</div>
 </form>
-
+<img class="box" src="../static/images/box.jpeg" alt="">
+<div id="canvas-container"></div>
 
 {% endblock %}

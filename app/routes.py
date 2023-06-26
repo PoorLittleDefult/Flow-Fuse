@@ -22,6 +22,7 @@ def load_user(user_id):
 def home():
     return render_template('home.html')
 
+
 @app.route('/mission')
 def mission():
     return render_template('mission.html')
@@ -79,14 +80,19 @@ def login():
             login_user(user)
 
             flash('Login successful!', 'success')
-            print(user.username)
-            print(user.password)
+            session['username'] = username
+            print(session['username'])
             return redirect(url_for('home'))
         else:
             return redirect('/login?error=Incorrect Login Details')
             # print('Invalid username or password', 'danger')
 
     return render_template('login.html')
+
+@app.route('/logout/api')
+def logout_api():
+    session.clear()
+    return redirect(url_for('home'))
 
 
 @app.route('/error')

@@ -12,7 +12,7 @@
       </div>
       <div class="item-card__content">
         <div class="item-category"><strong>Category:</strong> {{ item.category }}</div>
-        <div class="item-price"><strong>Price:</strong> {{ item.price }}</div>
+        <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
       </div>
     </div>
     {% endfor %}
