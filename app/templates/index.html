@@ -4,37 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800&display=swap' rel='stylesheet'>
     <title>Flow Fuse</title>
+    <script>
+    window.addEventListener('scroll', function() {
+      var header = document.querySelector('header');
+      var scrollPosition = window.scrollY;
     
+      if (scrollPosition > 0) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    </script>
 </head>
 <body>
     <header>
-        <div class="con">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="menu btn3" data-menu="3">
-                  <div class="icon"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="right-1">
-        <a class="right-h3" href="/login">Login</a>
-        </div>
-        <nav>
-            <div class="middle">
-            <h2>FLOW FUSE</h2>
-        </div>
             <div class="left">
-                <a href="/product">PRODUCTS</a>
-                <a href="/">TOKENS</a>
+              <a href="/"><h2>FLOW /FUSE</h2></a>
             </div>
             <div class="right">
-                <a href="/">ABOUT</a>
-                <a href="">DASHBOARD</a>
+              <a href="/product">PRODUCTS</a>
+              <a href="/">TOKENS</a>
+              <a href="/mission">MISSION</a>
+              <a href="/">DASHBOARD</a>
             </div>
-        </nav>
+            <div class="login">
+              <a href="/login">LOGIN</a>
+            </div>
     </header>
     {% block content %}{% endblock %}
       <script>
@@ -46,5 +45,6 @@
             });
 
     </script>
+    <script src="../static/textchanger.js"></script>
 </body>
 </html>

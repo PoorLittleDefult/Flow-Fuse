@@ -22,6 +22,10 @@ def load_user(user_id):
 def home():
     return render_template('home.html')
 
+@app.route('/mission')
+def mission():
+    return render_template('mission.html')
+
 @app.route('/product', methods=['GET', 'POST'])
 def product():
     items = Item.query.all()
@@ -72,7 +76,7 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-            login_user(user)  # Log in the user
+            login_user(user)
 
             flash('Login successful!', 'success')
             print(user.username)

@@ -1,6 +1,110 @@
 {% extends 'index.html' %} {% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div id="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+  <script>
+    // Ethereum price data API endpoint
+    const apiUrl = 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=180&interval=daily';
+
+    // Create an empty array to hold price data
+    let ethereumPriceData = [];
+    let timestamps = [];
+
+    // Create a Chart.js chart instance
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: timestamps,
+        datasets: [{
+          label: 'Ethereum Price',
+          data: ethereumPriceData,
+          fill: true,
+          borderColor: '#2ebdff',
+          tension: 0.1,
+          showLine: true,
+          pointRadius: 0 
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Price (USD)'
+            }
+          }
+        }
+      }
+    });
+
+    // Function to fetch Ethereum price data
+    function fetchEthereumPrice() {
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const prices = data.prices;
+
+          // Update the chart data
+          ethereumPriceData = prices.map(price => price[1]);
+          timestamps = prices.map(price => new Date(price[0]).toLocaleDateString());
+
+          chart.data.labels = timestamps;
+          chart.data.datasets[0].data = ethereumPriceData;
+          chart.update();
+        })
+        .catch(error => {
+          console.error('Error fetching Ethereum price:', error);
+        });
+    }
+
+    // Fetch Ethereum price initially
+    fetchEthereumPrice();
+  </script>
+
 <div class="h1-container">
-    <h1>MARKET ENGINEERING</h1> 
-    <h3 class="middle-h3">Defining the token market</h3> 
+    <h1>Bringing&nbsp;<span id="textchanger">Creative</span> Innovation</h1> 
+    <p class="main-paragraph">Flow fuse combines the future with the present<br>
+        Deliverying a stable market to trade digital assets</p> 
+</div>
+<div class="included-container">
+    <div class="card">
+        <h3>Build</h3>
+        <div class="flex-container">
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error consectetur cum tempore quisquam ad asperiores provident cumque et ea ex saepe culpa nostrum</p>
+            <img class="image" src="../static/images/upwards.png" alt="">
+        </div>
+    </div>
+    <div class="card">
+        <h3>Connect</h3>
+        <div class="flex-container">
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error consectetur cum tempore quisquam ad asperiores provident cumque et ea ex saepe culpa nostrum</p>
+            <img class="image" src="../static/images/connect.png" alt="">
+        </div>  
+    </div>    
+    <div class="card">
+        <h3>Earn</h3>
+        <div class="flex-container">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error consectetur cum tempore quisquam ad asperiores provident cumque et ea ex saepe culpa nostrum</p>
+        <img class="image" src="../static/images/earn.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="info-container">
+    <div class="info">
+        <h2>What is Flow Fuse?</h2>
+        <p>Flow Fuse is a platform that allows users to trade</p>
+        <p>digital assets in a secure and stable environment</p>
 </div>
 {% endblock %}
