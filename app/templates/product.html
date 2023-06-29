@@ -3,6 +3,16 @@
 <div class="add">
     <a href="/new-item">New Item</a>
 </div>
+  <!-- <div class="sort">
+    <form action="{{ url_for('sort_by_higher_price') }}" method="post">
+      <button type="submit">Sort by Highest Price</button>
+    </form>
+    <ul>
+      {% for item in items %}
+        <li>{{ item.name }} - {{ item.price }}</li>
+      {% endfor %}
+    </ul>
+  </div> -->
 <div class="container">
   <div class="item-list">
     {% for item in items %}
@@ -12,12 +22,12 @@
       </div>
       <div class="item-card__content">
         <div class="item-category"><strong>Category:</strong> {{ item.category }}</div>
+        <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
         <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
+        <button class="button-buy" role="button">Buy Now</button>
       </div>
     </div>
     {% endfor %}
   </div>
-</div>
-
-
+</div>  
 {% endblock %}

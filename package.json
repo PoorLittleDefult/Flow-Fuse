@@ -1,8 +1,11 @@
 {
   "dependencies": {
     "run": "^1.4.0",
-    "tailwindcss": "^3.3.2",
+    "tailwind": "^4.0.0",
     "three.js": "^0.77.1",
     "vite": "^4.3.9"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
   }
 }

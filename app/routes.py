@@ -1,18 +1,16 @@
-from app import app, db
-from app import models
 from flask import render_template, redirect, request, url_for, session, logging, flash
-from app.models import Item, User
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
-from sqlalchemy.orm import scoped_session,sessionmaker
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import create_engine
 from passlib.hash import sha256_crypt
+from app import app, db
+from app.models import Item, User
 
 # Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -112,3 +110,27 @@ def handle_error(error):
         "404.html",
         response=response
     )
+
+
+# -------------------- SORTING --------------------
+
+
+def get_items_sorted_by_price():
+    sort_order = request.form.get('sort_order', 'asc')
+    if sort_order == 'desc':
+        items = Item.query.order_by(Item.price.desc()).all()
+    else:
+        items = Item.query.order_by(Item.price.asc()).all()
+    return items
+
+
+@app.route('/sort_by_higher_price', methods=['GET', 'POST'])
+def sort_by_higher_price():
+    if request.method == 'POST':
+        items = get_items_sorted_by_price()
+        print(Item.query.order_by(Item.price.asc()).all())
+        print("WORKING")
+        return redirect(url_for('product', items=items))
+    else:
+        return redirect(url_for('product', items=items))
+    
