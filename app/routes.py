@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from passlib.hash import sha256_crypt
 from app import app, db
 from app.models import Item, User
+import time
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -76,7 +77,7 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             session['user_id'] = user.id
-            print(current_user.username)
+            print(current_user.id)
             print(current_user.is_authenticated)
             return redirect(url_for('home'))
         else:
@@ -135,15 +136,21 @@ def sort_by_higher_price():
 
 # --------------------------------------------------------
 
-
-@app.route('/buy', methods=['GET', 'POST'])
-def buy():
-    user_id = session.get('user_id')
-    print(user_id)  # Retrieve the user ID from the session
-    if user_id is None:
-        return redirect(url_for('product'))
+@app.route('/buy_action', methods=['POST'])
+def buy_action():
+    if current_user.is_authenticated:
+        item_id = request.form['item_id']
+        item = Item.query.get(item_id)  # Assuming 'item_id' is the primary key of the Item model
+        if item:
+            if item.user_id is None:
+                item.user_id = current_user.id
+                db.session.commit()
+                flash('Item purchased successfully!', 'success')
+            else:
+                time.sleep(2.4)
+                flash('Item already purchased!', 'error')
+        return redirect(url_for('home'))
     else:
-        user = User.query.filter_by(id=user_id).first()  # Retrieve the user from the database
-        print(user.username)  # Access other attributes of the user if needed
+        return redirect(url_for('product'))
 
-        return render_template('buy.html', user=user)
+

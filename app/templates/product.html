@@ -29,10 +29,22 @@
         <div class="item-category"><strong>Category:</strong> {{ item.category }}</div>
         <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
         <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
-        <button class="button-buy" role="button">Buy Now</button>
+        <form action="{{ url_for('buy_action') }}" method="post">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+          <input type="submit" class="button-buy" value="Buy Now">
+        </form>
       </div>
     </div>
     {% endfor %}
   </div>
 </div>  
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <ul class=flashes>
+  {% for message in messages %}
+    <li>{{ message }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
+{% endwith %}
 {% endblock %}
