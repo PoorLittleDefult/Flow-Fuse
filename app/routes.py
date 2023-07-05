@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, session, logging, flash
+from flask import render_template, redirect, request, url_for, session,flash, jsonify
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
@@ -7,6 +7,7 @@ from passlib.hash import sha256_crypt
 from app import app, db
 from app.models import Item, User
 import time
+from decimal import Decimal
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -143,9 +144,16 @@ def buy_action():
         item = Item.query.get(item_id)  # Assuming 'item_id' is the primary key of the Item model
         if item:
             if item.user_id is None:
-                item.user_id = current_user.id
-                db.session.commit()
-                flash('Item purchased successfully!', 'success')
+                # Check if the user has enough balance to purchase the item
+                if current_user.balance >= item.price:
+                    # Subtract the item's cost from the user's balance
+                    current_user.balance -= int(item.price)
+                    db.session.commit()
+                    item.user_id = current_user.id
+                    db.session.commit()
+                    flash('Item purchased successfully!', 'success')
+                else:
+                    flash('Insufficient balance!', 'error')
             else:
                 time.sleep(2.4)
                 flash('Item already purchased!', 'error')
@@ -154,3 +162,37 @@ def buy_action():
         return redirect(url_for('product'))
 
 
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    user_items = Item.query.filter_by(user_id=current_user.id).all()
+    return render_template('dashboard.html', items=user_items)
+
+
+
+@app.route('/snake', methods=['GET', 'POST'])
+def snake():
+    if request.method == 'POST':
+        score = int(request.form.get('score'))  # Get the score from the form data
+        current_user.balance += score  # Update the user's balance based on the score
+        db.session.commit()  # Commit the changes to the database
+        return redirect(url_for('snake'))
+
+    return render_template('snake.html')
+
+
+@app.route('/update_balance', methods=['POST'])
+@login_required
+def update_balance():
+    print("UPDATE BALANCE WORKING")
+    # Get the score from the request
+    score = int(request.json['score'])
+    print(score)
+    # Calculate the balance based on the score
+    balance = float(current_user.balance) + score # Adjust the calculation based on your needs
+    # Update the user's balance in the User table
+    current_user.balance = int(balance)
+    print(current_user.balance)
+    db.session.commit()
+    print(f"Balance updated: {balance}")  # Add this line to print the updated balance
+
+    return jsonify(message='Balance updated')

@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), nullable=False)
     fullname = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
+    balance = db.Column(db.Float, default=0)
+
 
     def is_active(self):
         return True  
@@ -25,3 +27,5 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+
+

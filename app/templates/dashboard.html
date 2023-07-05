@@ -1,0 +1,23 @@
+{% extends 'index.html' %} {% block content %}
+<h2 class="h2-item">My Items - current balance: {{ current_user.balance }}</h2>
+<div class="container">
+  <div class="item-list">
+    {% for item in items %}
+    <div class="item-card">
+      <div class="item-card__header">
+        <div class="item-name">{{ item.item_name }}</div>
+      </div>
+      <div class="item-card__content">
+        <div class="item-category"><strong>Category:</strong> {{ item.category }}</div>
+        <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
+        <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
+        <form action="{{ url_for('buy_action') }}" method="post">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+          <input type="submit" class="button-buy" value="Buy Now">
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>  
+{% endblock %}

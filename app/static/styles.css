@@ -17,14 +17,13 @@
 
 html{
     scroll-behavior: smooth;
-    overflow-x: hidden;
 }
 
 body{    
     margin: 0;
     width: 100vw;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
     /* margin-bottom: 500px;  */
 }
 
@@ -578,10 +577,17 @@ form .user-details .input-box{
 
 /* -----------------item--------------------- */
 
+.h2-item {
+  font-size: 40px;
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+}
 
 .container {
     position: absolute;
-    top: 25vw;
+    top: 30vw;
     left: 50%;
     transform: translate(-50%, -50%); 
     width: 80vw;
