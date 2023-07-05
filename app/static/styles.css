@@ -581,7 +581,6 @@ form .user-details .input-box{
 
 .container {
     position: absolute;
-    overflow: auto;
     top: 25vw;
     left: 50%;
     transform: translate(-50%, -50%); 
@@ -594,6 +593,7 @@ form .user-details .input-box{
 
 
 .item-list {
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 20px;

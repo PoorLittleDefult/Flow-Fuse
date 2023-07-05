@@ -11,14 +11,13 @@ from app.models import Item, User
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/', methods=['GET', 'POST'])
-def home():
-    return render_template('home.html')
+def home(): # Retrieve the user from the database
+    return render_template('home.html')  # Pass the 'user' object to the template
 
 
 @app.route('/mission')
@@ -76,16 +75,15 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-
-            flash('Login successful!', 'success')
-            session['username'] = username
-            print(session['username'])
+            session['user_id'] = user.id
+            print(current_user.username)
+            print(current_user.is_authenticated)
             return redirect(url_for('home'))
         else:
-            return redirect('/login?error=Incorrect Login Details')
-            # print('Invalid username or password', 'danger')
+            flash('LOGIN FAILED!', 'success')
 
     return render_template('login.html')
+
 
 @app.route('/logout/api')
 def logout_api():
@@ -134,3 +132,18 @@ def sort_by_higher_price():
     else:
         return redirect(url_for('product', items=items))
     
+
+# --------------------------------------------------------
+
+
+@app.route('/buy', methods=['GET', 'POST'])
+def buy():
+    user_id = session.get('user_id')
+    print(user_id)  # Retrieve the user ID from the session
+    if user_id is None:
+        return redirect(url_for('product'))
+    else:
+        user = User.query.filter_by(id=user_id).first()  # Retrieve the user from the database
+        print(user.username)  # Access other attributes of the user if needed
+
+        return render_template('buy.html', user=user)

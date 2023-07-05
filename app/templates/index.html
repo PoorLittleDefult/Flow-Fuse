@@ -32,15 +32,15 @@
               <a href="/mission">MISSION</a>
               <a href="/">DASHBOARD</a>
             </div>
-            {% if not session['username']%}
+            {% if current_user.is_authenticated == false %}
             <div class="login">
               <a href="/login">LOGIN</a>
             </div>
             {% endif %}
-            {% if session['username']%}
+            {% if current_user.is_authenticated %}
             <div class="signedin">
               <div class="dropdown">
-                <button class="btn">{{session['username']}}&nbsp;<i class="fa fa-caret-down"></i></button>
+                <button class="btn">{{ current_user.username }}&nbsp;<i class="fa fa-caret-down"></i></button>
                 <div class="dropdown-content">
                   <a href="{{ url_for( 'logout_api') }}">LOGOUT</a>
                 </div>

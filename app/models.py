@@ -1,4 +1,5 @@
 from app import db
+from flask_login import UserMixin
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,7 +9,7 @@ class Item(db.Model):
     description = db.Column(db.String)
     price = db.Column(db.Numeric, nullable=False)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
