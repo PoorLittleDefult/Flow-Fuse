@@ -5,8 +5,9 @@ from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import sha256_crypt
 from app import app, db
-from app.models import Item, User
+from app.models import Item, User, Purchase
 import time
+from datetime import datetime
 from decimal import Decimal
 
 # Initialize Flask-Login
@@ -37,9 +38,11 @@ def new_item():
     if request.method == 'POST':
         item_name = request.form['item_name']
         category = request.form['category']
+        description = request.form['description']
         price = request.form['price']
-        item = Item(item_name=item_name, category=category, price=price)
+        item = Item(item_name=item_name, category=category, description=description, price=price)
         db.session.add(item)
+        item.user_id = current_user.id
         db.session.commit()
         return redirect(url_for('product'))
     return render_template('new_item.html')
@@ -135,7 +138,8 @@ def sort_by_higher_price():
         return redirect(url_for('product', items=items))
     
 
-# --------------------------------------------------------
+# ---------------------- BUY FUNCTIONS -----------------------------
+
 
 @app.route('/buy_action', methods=['POST'])
 def buy_action():
@@ -143,20 +147,28 @@ def buy_action():
         item_id = request.form['item_id']
         item = Item.query.get(item_id)  # Assuming 'item_id' is the primary key of the Item model
         if item:
-            if item.user_id is None:
-                # Check if the user has enough balance to purchase the item
-                if current_user.balance >= item.price:
-                    # Subtract the item's cost from the user's balance
-                    current_user.balance -= int(item.price)
-                    db.session.commit()
-                    item.user_id = current_user.id
-                    db.session.commit()
-                    flash('Item purchased successfully!', 'success')
-                else:
-                    flash('Insufficient balance!', 'error')
+            # Check if the user has enough balance to purchase the item
+            if current_user.balance >= item.price:
+                # Subtract the item's cost from the user's balance
+                current_user.balance -= int(item.price)
+                # Create a new purchase record
+                purchase = Purchase(
+                    buyer_id=current_user.id,
+                    seller_id=item.user_id,
+                    item_id=item.id,
+                    datetime=datetime.now(),
+                    cost_of_item=item.price
+                )
+                db.session.add(purchase)
+                db.session.commit()
+                item.user_id = current_user.id
+                db.session.commit()
+                flash('Item purchased successfully!', 'success')
             else:
-                time.sleep(2.4)
-                flash('Item already purchased!', 'error')
+                flash('Insufficient balance!', 'error')
+        else:
+            time.sleep(2)
+            flash('Item does not exist!', 'error')
         return redirect(url_for('home'))
     else:
         return redirect(url_for('product'))

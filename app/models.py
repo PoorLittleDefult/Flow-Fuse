@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 from flask_login import UserMixin
 
 class Item(db.Model):
@@ -29,3 +30,10 @@ class User(UserMixin, db.Model):
         return f"<User {self.username}>"
 
 
+class Purchase(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    seller_id = db.Column(db.Integer, db.ForeignKey('item.user_id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    cost_of_item = db.Column(db.Numeric, db.ForeignKey('item.price'), nullable=False)

@@ -9,6 +9,22 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800&display=swap' rel='stylesheet'>
     <title>Flow Fuse</title>
     <script>
+      const categorySelect = document.getElementById('category');
+      const categoryTag = document.getElementById('categoryTag');
+
+      categorySelect.addEventListener('change', function() {
+        const selectedCategory = categorySelect.value;
+
+        categoryTag.classList.remove('lightred', 'lightblue');
+
+        if (selectedCategory === 'volvo') {
+          categoryTag.classList.add('lightred');
+        } else if (selectedCategory === 'saab') {
+          categoryTag.classList.add('lightblue');
+        }
+      });
+    </script>
+    <script>
     window.addEventListener('scroll', function() {
       var header = document.querySelector('header');
       var scrollPosition = window.scrollY;

@@ -9,11 +9,15 @@
     <input type="text" name="item_name" maxlength="20" required>
 
     <label for="category">Category:</label>
-    <input type="text" name="category" required>
+    <select id="category" name="category" required>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+    </select>
 
     <label for="Description">Description:</label>
-    <textarea rows="4" cols="50" name="comment" form="form-create" required>
-    Enter text here...</textarea>
+    <textarea rows="4" cols="50" name="description" form="form-create" required></textarea>
 
     <label for="price">Price:</label>
     <input type="number" step="0.01" name="price" min="0" max="9999999" required>

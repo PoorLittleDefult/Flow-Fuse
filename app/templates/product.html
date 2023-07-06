@@ -8,36 +8,29 @@
 <div class="add">
     <a href="/new-item">New Item</a>
 </div>
-  <!-- <div class="sort">
-    <form action="{{ url_for('sort_by_higher_price') }}" method="post">
-      <button type="submit">Sort by Highest Price</button>
-    </form>
-    <ul>
+  <div class="container">
+    <div class="item-list">
       {% for item in items %}
-        <li>{{ item.name }} - {{ item.price }}</li>
+      <div class="item-card">
+        <div class="item-image">
+          <img src="../static/images/test-image.jpg" alt="Your Image">
+        </div>
+        <div class="item-card__content">
+          <div class="item-card__header">
+            <div class="item-name">{{ item.item_name }}</div>
+            <a><span class="tag lightblue" data-category="{{ item.category }}">{{ item.category }}</span></a>
+          </div>
+          <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
+          <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
+          <form action="{{ url_for('buy_action') }}" method="post">
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <input type="submit" class="button-buy" value="Buy Now">
+          </form>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
-  </div> -->
-<div class="container">
-  <div class="item-list">
-    {% for item in items %}
-    <div class="item-card">
-      <div class="item-card__header">
-        <div class="item-name">{{ item.item_name }}</div>
-      </div>
-      <div class="item-card__content">
-        <div class="item-category"><strong>Category:</strong> {{ item.category }}</div>
-        <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
-        <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
-        <form action="{{ url_for('buy_action') }}" method="post">
-          <input type="hidden" name="item_id" value="{{ item.id }}">
-          <input type="submit" class="button-buy" value="Buy Now">
-        </form>
-      </div>
     </div>
-    {% endfor %}
   </div>
-</div>  
 {% with messages = get_flashed_messages() %}
 {% if messages %}
   <ul class=flashes>
