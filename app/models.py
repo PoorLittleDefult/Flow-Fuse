@@ -9,6 +9,8 @@ class Item(db.Model):
     category = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     price = db.Column(db.Numeric, nullable=False)
+    image_url= db.Column(db.String)
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

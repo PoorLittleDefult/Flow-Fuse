@@ -28,6 +28,13 @@ body{
     /* margin-bottom: 500px;  */
 }
 
+@media screen and (max-width: 768px) {
+  body{
+    overflow-x: hidden;
+  }
+}
+
+
 .extra-space {
   height: 50px; 
   width: 100%;
@@ -50,19 +57,6 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
-
-/* header */
-
-/* footer{
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-  height: 10vh;
-  background-color: #ce0808;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
 header {
   height: 10vh;
@@ -88,6 +82,13 @@ header.scrolled {
   transform: translate(-50%, -50%);
 }
 
+@media screen and (max-width: 768px) {
+  .left{
+    left: 20%;
+  }
+}
+  
+
 .right {
   position: absolute;
   margin-top: 35px;
@@ -98,6 +99,7 @@ header.scrolled {
 
 .right a{
   font-weight: 500;
+  font-size: 12px;
 }
 
 a{
@@ -212,11 +214,30 @@ h2{
   font-weight: 500;
 }
 
+@media screen and (max-width: 768px) {
+  .main-paragraph{
+    font-size: 18px;
+  }
+}
+
 
 h1{
     color: #000000;
     font-size: 40px;
     font-weight: 700; 
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .right{
+    display: none;
+  }
+
+  h1{
+  font-size: 40px;
+}
+
 }
 
 #textchanger{
@@ -237,26 +258,12 @@ h1{
   top: 40%;
 }
 
-@media screen and (max-width: 550px) {
-
-  .right{
-    display: none;
-  }
-
-  nav{
-    display: none;
-  }
-
-  h1{
-  font-size: 20px;
-  letter-spacing: 5px;
-}
 
 .middle-h3{
   font-size: 2vw;
   letter-spacing: 5px;
 }
-}
+
 
 .h1-container {
   position: absolute;
@@ -267,12 +274,52 @@ h1{
   height: auto;
 }
 
+@media screen and (max-width: 1468px) {
+  .h1-container{
+    top: 20%;
+    zoom: 70%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .h1-container{
+    top: 20%;
+  }
+}
+  
+
 #chart-container {
   position: absolute;
   left: 52%;
   top: 15%;
   width: 500px;
 }
+
+@media screen and (max-width: 1024px) {
+  #chart-container {
+    top: 30%;
+    left: 5%;
+    width: 700px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #chart-container {
+    top: 30%;
+    left: 5%;
+    width: 600px;
+  }
+}
+
+
+@media screen and (max-width: 605px) {
+  #chart-container {
+    top: 30%;
+    left: 5%;
+    width: 400px;
+  }
+}
+
 
 
 /* ----------------------------------------------- hamburger ------------------------------------------------- */
@@ -507,6 +554,26 @@ form .user-details .input-box{
   gap: 60px;
 }
 
+@media screen and (max-width: 1024px) {
+  .included-container {
+    top: 80%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .included-container {
+    top: 65%
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .included-container {
+    display: none;
+  }
+}
+
+  
+
 .card {
   flex: 1 0 auto; /* Allow cards to grow and shrink as needed */
   max-width: calc((100% - 120px) / 3); /* Calculate the max-width based on container width and gap */
@@ -517,8 +584,21 @@ form .user-details .input-box{
   transition: all 0.3s ease;
 }
 
+@media screen and (max-width: 1468px) {
+  .card{
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .card{
+    height: 20%;
+  }
+}
+
+
 .card h3{
-  font-size: 40px;
+  font-size: 3vw;
   font-weight: 700;
   margin: 20px;
   padding: 0;
@@ -538,6 +618,19 @@ form .user-details .input-box{
   display: inline-flex;
 }
 
+@media screen and (max-width: 1468px) {
+  .flex-container{
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .flex-container p{
+    display: none;
+    width: 100%;
+  }
+}
+
 .card:hover{
   transform: scale(0.99);
   box-shadow: 0 5px 10px rgba(0,0,0,0.25);
@@ -549,6 +642,16 @@ form .user-details .input-box{
   position: relative;
   margin: 20px;
 }
+
+@media screen and (max-width: 500px) {
+  .image {
+    width: 50px;
+    height: auto;
+    position: relative;
+    margin: 20px;
+  }
+}
+  
 
 
 .info-container {
@@ -799,7 +902,7 @@ form .user-details .input-box{
 
 .wrapper-container {
   position: absolute;
-  top: 200%;
+  top: 190%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: calc(100% - 10%);
@@ -809,10 +912,17 @@ form .user-details .input-box{
   align-items: center; /* Vertically center the items */
 }
 
+@media screen and (max-width: 768px)
+ {
+  .wrapper-container {
+    top: 210%;
+  }
+}
+
 .card-container {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 2%;
   width: calc(100% - 40%);
   height: auto;
   display: flex;
@@ -855,7 +965,26 @@ form .user-details .input-box{
   font-size: 40px;
 }
 
+.text-area p{
+  font-size: 18px;
+}
+
 .sort{
   position: absolute;
   top: 160%;
 }
+
+
+.mission-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mission-container h2{
+  font-size: 60px;
+  color: rgb(0, 0, 0);
+  text-shadow: -20px 20px #dddddd, 20px -20px #dddddd;
+}
+

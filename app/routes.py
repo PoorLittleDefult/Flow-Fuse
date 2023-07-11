@@ -1,14 +1,25 @@
 from flask import render_template, redirect, request, url_for, session,flash, jsonify
+from werkzeug.utils import secure_filename
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import sha256_crypt
 from app import app, db
+import os
+import requests
 from app.models import Item, User, Purchase
 import time
 from datetime import datetime
 from decimal import Decimal
+
+
+# UPLOAD_FOLDER = '/app/static/images/'
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# upload_folder = app.config['UPLOAD_FOLDER']
+# os.makedirs(upload_folder, exist_ok=True)
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -33,6 +44,7 @@ def product():
     return render_template('product.html', items=items)
 
 
+
 @app.route('/new-item', methods=['GET', 'POST'])
 def new_item():
     if request.method == 'POST':
@@ -40,12 +52,34 @@ def new_item():
         category = request.form['category']
         description = request.form['description']
         price = request.form['price']
-        item = Item(item_name=item_name, category=category, description=description, price=price)
+        image_url = request.form['image_url']
+        item = Item(item_name=item_name, category=category, description=description, price=price, image_url=image_url)
         db.session.add(item)
         item.user_id = current_user.id
         db.session.commit()
         return redirect(url_for('product'))
+
     return render_template('new_item.html')
+
+
+@app.route('/delete-item/<int:item_id>', methods=['POST'])
+@login_required
+def delete_item(item_id):
+    # Retrieve the item
+    item = Item.query.get(item_id)
+
+    # Check if the item exists and belongs to the current user
+    if item and item.user_id == current_user.id:
+        # Delete the item
+        db.session.delete(item)
+        db.session.commit()
+        flash("Item deleted successfully.", "success")
+    else:
+        flash("Failed to delete item. Please try again.", "error")
+
+    return redirect(url_for('product'))
+
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
