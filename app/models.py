@@ -39,3 +39,9 @@ class Purchase(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
     cost_of_item = db.Column(db.Numeric, db.ForeignKey('item.price'), nullable=False)
+
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    star_rating = db.Column(db.Integer, nullable=False)

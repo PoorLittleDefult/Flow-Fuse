@@ -8,7 +8,7 @@ from passlib.hash import sha256_crypt
 from app import app, db
 import os
 import requests
-from app.models import Item, User, Purchase
+from app.models import Item, User, Purchase, Rating
 import time
 from datetime import datetime
 from decimal import Decimal
@@ -210,8 +210,12 @@ def buy_action():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    user_items = Item.query.filter_by(user_id=current_user.id).all()
-    return render_template('dashboard.html', items=user_items)
+    if current_user.is_authenticated:
+        user_items = Item.query.filter_by(user_id=current_user.id).all()
+        return render_template('dashboard.html', items=user_items)
+    else:
+        return redirect(url_for('login'))
+
 
 
 
@@ -242,3 +246,38 @@ def update_balance():
     print(f"Balance updated: {balance}")  # Add this line to print the updated balance
 
     return jsonify(message='Balance updated')
+
+
+
+@app.route('/star-rating', methods=['POST'])
+@login_required
+def star_rating():
+    if request.method == 'POST':
+        # Get the rating value from the form
+        star_rating = int(request.form.get('rate'))
+
+        # Get the item ID from the hidden input in the form
+        item_id = int(request.form.get('item_id'))
+
+        # Get the currently logged-in user's ID
+        user_id = current_user.id  # Assuming you are using Flask-Login
+
+        # Check if the user has already rated this item
+        existing_rating = Rating.query.filter_by(user_id=user_id, item_id=item_id).first()
+
+        if existing_rating:
+            # If the user has already rated, update the rating value
+            existing_rating.star_rating = star_rating
+        else:
+            # If the user has not rated, create a new Rating object
+            new_rating = Rating(user_id=user_id, item_id=item_id, star_rating=star_rating)
+            db.session.add(new_rating)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Redirect back to the same page after submitting the rating
+        return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page
+
+    # Handle cases where the request method is not POST (optional)
+    return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page

@@ -1,43 +1,79 @@
-{% extends 'index.html' %} {% block content %}
+{% extends 'index.html' %}
+{% block content %}
 <style>
-  body{
+  body {
     overflow: hidden !important;
   }
 </style>
 
 <div class="add">
-    <a href="/new-item">New Item</a>
+  <a href="/new-item">New Item</a>
 </div>
-  <div class="container">
-    <div class="item-list">
-      {% for item in items %}
-      <div class="item-card">
-        <div class="item-image">
-          <img src="{{ item.image_url }}">
-        </div>
-        <div class="item-card__content">
-          <div class="item-card__header">
-            <div class="item-name">{{ item.item_name }}</div>
-            <a><span class="tag lightblue" data-category="{{ item.category }}">{{ item.category }}</span></a>
-          </div>
-          <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
-          <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
-          <form action="{{ url_for('buy_action') }}" method="post">
-            <input type="hidden" name="item_id" value="{{ item.id }}">
-            <input type="submit" class="button-buy" value="Buy Now">
-          </form>
-        </div>
+<div class="container">
+  <div class="item-list">
+    {% for item in items %}
+    <div class="item-card">
+      <div class="item-image">
+        <img src="{{ item.image_url }}">
       </div>
-      {% endfor %}
+      <div class="item-card__content">
+        <div class="item-card__header">
+          <div class="item-name">{{ item.item_name }}</div>
+          <a><span class="tag lightblue" data-category="{{ item.category }}">{{ item.category }}</span></a>
+        </div>
+        <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
+        <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
+        <div class="rate">
+          <input type="radio" id="star5_{{ item.id }}" name="rate_{{ item.id }}" value="5" />
+          <label for="star5_{{ item.id }}" title="text">5 stars</label>
+          <input type="radio" id="star4_{{ item.id }}" name="rate_{{ item.id }}" value="4" />
+          <label for="star4_{{ item.id }}" title="text">4 stars</label>
+          <input type="radio" id="star3_{{ item.id }}" name="rate_{{ item.id }}" value="3" />
+          <label for="star3_{{ item.id }}" title="text">3 stars</label>
+          <input type="radio" id="star2_{{ item.id }}" name="rate_{{ item.id }}" value="2" />
+          <label for="star2_{{ item.id }}" title="text">2 stars</label>
+          <input type="radio" id="star1_{{ item.id }}" name="rate_{{ item.id }}" value="1" />
+          <label for="star1_{{ item.id }}" title="text">1 star</label>
+        </div>
+        <form action="{{ url_for('star_rating') }}" method="post">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+          <input type="hidden" name="rate" id="selected-rate_{{ item.id }}" value="0"> <!-- This will hold the selected rating value -->
+          <input type="submit" class="button-buy" value="Submit Rating">
+        </form>
+        <form action="{{ url_for('buy_action') }}" method="post">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+          <input type="submit" class="button-buy" value="Buy Now">
+        </form>
+      </div>
     </div>
+    {% endfor %}
   </div>
+</div>
+
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <ul class=flashes>
+<ul class=flashes>
   {% for message in messages %}
-    <li>{{ message }}</li>
+  <li>{{ message }}</li>
   {% endfor %}
-  </ul>
+</ul>
 {% endif %}
 {% endwith %}
+
+<script>
+  // JavaScript code to handle star rating selection
+  const ratingForms = document.querySelectorAll('.rate form');
+
+  ratingForms.forEach(form => {
+    const stars = form.querySelectorAll('.rate input[type="radio"]');
+    const selectedRate = form.querySelector('[name="rate"]');
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRate.value = star.value;
+      });
+    });
+  });
+</script>
+
 {% endblock %}
