@@ -14,14 +14,6 @@ from datetime import datetime
 from decimal import Decimal
 
 
-# UPLOAD_FOLDER = '/app/static/images/'
-# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# upload_folder = app.config['UPLOAD_FOLDER']
-# os.makedirs(upload_folder, exist_ok=True)
-
-# Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -253,17 +245,23 @@ def update_balance():
 @login_required
 def star_rating():
     if request.method == 'POST':
-        # Get the rating value from the form
-        star_rating = int(request.form.get('rate'))
-
-        # Get the item ID from the hidden input in the form
         item_id = int(request.form.get('item_id'))
+        print(item_id)
+        
+        item = Item.query.filter_by(id=item_id).first()
+        print(item)
 
+        # Get the rating value from the form
+        star_rating = int(request.form.get('rate'))  # Default to 0 if 'rate' is not present or not an integer
+        print(star_rating)
+        
+        # Get the item ID from the hidden input in the form
         # Get the currently logged-in user's ID
         user_id = current_user.id  # Assuming you are using Flask-Login
 
         # Check if the user has already rated this item
         existing_rating = Rating.query.filter_by(user_id=user_id, item_id=item_id).first()
+        print(existing_rating)
 
         if existing_rating:
             # If the user has already rated, update the rating value

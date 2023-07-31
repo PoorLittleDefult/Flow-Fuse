@@ -1,5 +1,63 @@
 {% extends 'index.html' %}
 {% block content %}
+<script>
+  function submitRating(itemId) {
+    console.log('Item ID:', itemId);
+
+    const ratingForms = document.querySelectorAll(`input[name="rate_${itemId}"]`);
+    console.log('Rating Forms:', ratingForms);
+
+    let selectedRating = 0;
+    ratingForms.forEach((radio) => {
+      if (radio.checked) {
+        selectedRating = parseInt(radio.value);
+      }
+    });
+
+    console.log('Selected Rating:', selectedRating);
+    debugger;
+
+    // Create a new FormData object and append the data
+    const formData = new FormData();
+    formData.append('rate', selectedRating);
+    formData.append('item_id', itemId);
+
+    // Send the data to the server using a POST request
+    fetch('/star-rating', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data); // Optional: Log the response from the server if needed
+        // You can handle the response here (e.g., show a success message)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Handle errors if needed
+      });
+  
+  }
+</script>
+
+
+<!-- <script>
+  const ratingForm = document.querySelector('div.rate form');
+  console.log(ratingForm); 
+
+  ratingForms.forEach(form => {
+    const stars = form.querySelectorAll('.rate input[type="radio"]');
+    const selectedRate = form.querySelector('[name="rate"]');
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        console.log('clicked')
+        selectedRate.value = stars.value; 
+        console.log(stars.value);   
+      });
+    });
+  });
+</script>  -->
 <style>
   body {
     overflow: hidden !important;
@@ -23,23 +81,23 @@
         </div>
         <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
         <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
-        <div class="rate">
-          <input type="radio" id="star5_{{ item.id }}" name="rate_{{ item.id }}" value="5" />
-          <label for="star5_{{ item.id }}" title="text">5 stars</label>
-          <input type="radio" id="star4_{{ item.id }}" name="rate_{{ item.id }}" value="4" />
-          <label for="star4_{{ item.id }}" title="text">4 stars</label>
-          <input type="radio" id="star3_{{ item.id }}" name="rate_{{ item.id }}" value="3" />
-          <label for="star3_{{ item.id }}" title="text">3 stars</label>
-          <input type="radio" id="star2_{{ item.id }}" name="rate_{{ item.id }}" value="2" />
-          <label for="star2_{{ item.id }}" title="text">2 stars</label>
-          <input type="radio" id="star1_{{ item.id }}" name="rate_{{ item.id }}" value="1" />
-          <label for="star1_{{ item.id }}" title="text">1 star</label>
-        </div>
-        <form action="{{ url_for('star_rating') }}" method="post">
-          <input type="hidden" name="item_id" value="{{ item.id }}">
-          <input type="hidden" name="rate" id="selected-rate_{{ item.id }}" value="0"> <!-- This will hold the selected rating value -->
-          <input type="submit" class="button-buy" value="Submit Rating">
-        </form>
+        <form action="{{ url_for('star_rating', item_id=item.id) }}" method="post">
+          <div class="rate">
+            <input type="radio" id="star5_{{ item.id }}" name="rate_{{ item.id }}" value="5" />
+            <label for="star5_{{ item.id }}" title="text">5 stars</label>
+            <input type="radio" id="star4_{{ item.id }}" name="rate_{{ item.id }}" value="4" />
+            <label for="star4_{{ item.id }}" title="text">4 stars</label>
+            <input type="radio" id="star3_{{ item.id }}" name="rate_{{ item.id }}" value="3" />
+            <label for="star3_{{ item.id }}" title="text">3 stars</label>
+            <input type="radio" id="star2_{{ item.id }}" name="rate_{{ item.id }}" value="2" />
+            <label for="star2_{{ item.id }}" title="text">2 stars</label>
+            <input type="radio" id="star1_{{ item.id }}" name="rate_{{ item.id }}" value="1" />
+            <label for="star1_{{ item.id }}" title="text">1 star</label>
+          </div>
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <input type="hidden" name="rate" id="selected-rate_{{ item.id }}" value="0">
+            <button class="button-buy" onclick="submitRating('{{ item.id }}')">Submit Rating</button>
+          </form>
         <form action="{{ url_for('buy_action') }}" method="post">
           <input type="hidden" name="item_id" value="{{ item.id }}">
           <input type="submit" class="button-buy" value="Buy Now">
@@ -60,20 +118,5 @@
 {% endif %}
 {% endwith %}
 
-<script>
-  // JavaScript code to handle star rating selection
-  const ratingForms = document.querySelectorAll('.rate form');
-
-  ratingForms.forEach(form => {
-    const stars = form.querySelectorAll('.rate input[type="radio"]');
-    const selectedRate = form.querySelector('[name="rate"]');
-
-    stars.forEach(star => {
-      star.addEventListener('click', () => {
-        selectedRate.value = star.value;
-      });
-    });
-  });
-</script>
 
 {% endblock %}
