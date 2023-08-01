@@ -254,28 +254,33 @@ def star_rating():
         # Get the rating value from the form
         star_rating = int(request.form.get('rate'))  # Default to 0 if 'rate' is not present or not an integer
         print(star_rating)
+
+        if star_rating == 0:
+            flash('Please select a rating!', 'error')
+            return redirect(url_for('product'))
         
+        else:
         # Get the item ID from the hidden input in the form
         # Get the currently logged-in user's ID
-        user_id = current_user.id  # Assuming you are using Flask-Login
+            user_id = current_user.id  # Assuming you are using Flask-Login
 
-        # Check if the user has already rated this item
-        existing_rating = Rating.query.filter_by(user_id=user_id, item_id=item_id).first()
-        print(existing_rating)
+            # Check if the user has already rated this item
+            existing_rating = Rating.query.filter_by(user_id=user_id, item_id=item_id).first()
+            print(existing_rating)
 
-        if existing_rating:
-            # If the user has already rated, update the rating value
-            existing_rating.star_rating = star_rating
-        else:
-            # If the user has not rated, create a new Rating object
-            new_rating = Rating(user_id=user_id, item_id=item_id, star_rating=star_rating)
-            db.session.add(new_rating)
+            if existing_rating:
+                # If the user has already rated, update the rating value
+                existing_rating.star_rating = star_rating
+            else:
+                # If the user has not rated, create a new Rating object
+                new_rating = Rating(user_id=user_id, item_id=item_id, star_rating=star_rating)
+                db.session.add(new_rating)
 
-        # Commit the changes to the database
-        db.session.commit()
+            # Commit the changes to the database
+            db.session.commit()
 
-        # Redirect back to the same page after submitting the rating
-        return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page
+            # Redirect back to the same page after submitting the rating
+            return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page
 
     # Handle cases where the request method is not POST (optional)
     return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page
