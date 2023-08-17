@@ -67,6 +67,9 @@
 <div class="add">
   <a href="/new-item">New Item</a>
 </div>
+
+
+
 <div class="container">
   <div class="item-list">
     {% for item in items %}
@@ -81,6 +84,14 @@
         </div>
         <div class="item-category"><strong>Description:</strong> {{ item.description }}</div>
         <div class="item-price"><strong>Price:</strong> {{ "$%.2f"|format(item.price) }}</div>
+        <div class="average-rating">
+          <strong>Average Rating:</strong>
+          {% if item_ratings[item.id] %}
+            {{ "%.2f" % item_ratings[item.id] }} stars
+          {% else %}
+            Not rated yet
+          {% endif %}
+        </div>
         <form action="{{ url_for('star_rating', item_id=item.id) }}" method="post">
           <div class="rate">
             <input type="radio" id="star5_{{ item.id }}" name="rate_{{ item.id }}" value="5" />

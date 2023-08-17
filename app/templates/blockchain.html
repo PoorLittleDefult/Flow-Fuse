@@ -1,0 +1,25 @@
+{% extends 'index.html' %} {% block content %}
+
+<div class="container">
+<div class="item-list">
+  {% for blocks in blocks %}
+<div class="item-card">
+    <div class="item-card__content">
+      <div class="item-card__header">
+        <div class="item-name">Block Number: {{ blocks.id }}</div>
+        <a><span class="tag lightblue">
+          {% for user in users %}
+            {% if user.id == blocks.buyer_id %}
+                {{ user.name }}
+            {% endif %}</span></a>
+      {% endfor %}
+      </div>
+      <div class="item-category"><strong>Seller ID: </strong>{{ blocks.seller_id }}</div>
+      <div class="item-price"><strong>Price:</strong> {{blocks.item_id}}</div>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>  
+
+{% endblock %}

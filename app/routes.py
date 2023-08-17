@@ -33,7 +33,14 @@ def mission():
 @app.route('/product', methods=['GET', 'POST'])
 def product():
     items = Item.query.all()
-    return render_template('product.html', items=items)
+    item_ratings = {}
+    
+    for item in items:
+        ratings = Rating.query.filter_by(item_id=item.id).all()
+        total_ratings = sum([rating.star_rating for rating in ratings])
+        average_rating = total_ratings / len(ratings) if len(ratings) > 0 else 0
+        item_ratings[item.id] = average_rating
+    return render_template('product.html', items=items, item_ratings=item_ratings)
 
 
 
@@ -203,8 +210,8 @@ def buy_action():
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if current_user.is_authenticated:
-        user_items = Item.query.filter_by(user_id=current_user.id).all()
-        return render_template('dashboard.html', items=user_items)
+        user_items = Item.query.filter_by(user_id=current_user.id).order_by(Item.price.desc()).all()
+        return render_template('dashboard.html', user_items=user_items)
     else:
         return redirect(url_for('login'))
 
@@ -258,7 +265,6 @@ def star_rating():
         if star_rating == 0:
             flash('Please select a rating!', 'error')
             return redirect(url_for('product'))
-        
         else:
         # Get the item ID from the hidden input in the form
         # Get the currently logged-in user's ID
@@ -284,3 +290,10 @@ def star_rating():
 
     # Handle cases where the request method is not POST (optional)
     return redirect(url_for('product'))  # Change 'index' to the appropriate route for your page
+
+
+@app.route('/blockchain', methods=['GET', 'POST'])
+def blockchain():
+    blocks = Purchase.query.all()
+    users = User.query.all() 
+    return render_template('blockchain.html', blocks=blocks, users=users)
