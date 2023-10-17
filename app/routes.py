@@ -221,6 +221,10 @@ def sort_by_higher_price():
 
 @app.route('/buy_action', methods=['POST'])
 def buy_action():
+    '''function for purchasing items'''
+    # pylint: disable=W0612
+    # pylint: disable=E1101
+    # pylint: disable=W0718
     if current_user.is_authenticated:
         item_id = request.form['item_id']
         item = Item.query.get(item_id)
@@ -261,7 +265,7 @@ def buy_action():
                 except Exception as e:
                     # Handle any exceptions here
                     db.session.rollback()
-                    flash('An error occurred during the purchase. Please try again.', 'error')
+                    flash('An error occurred during the purchase')
                 finally:
                     db.session.close()
             else:
