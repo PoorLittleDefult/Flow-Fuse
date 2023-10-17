@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 from flask_login import UserMixin
 
+
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -21,7 +22,6 @@ class User(UserMixin, db.Model):
     phone = db.Column(db.String(20), nullable=False)
     balance = db.Column(db.Float, default=0)
 
-
     def is_active(self):
         return True  
     
@@ -39,6 +39,7 @@ class Purchase(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
     cost_of_item = db.Column(db.Numeric, db.ForeignKey('item.price'), nullable=False)
+
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
