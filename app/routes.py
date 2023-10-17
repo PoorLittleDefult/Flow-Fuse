@@ -221,37 +221,54 @@ def sort_by_higher_price():
 
 @app.route('/buy_action', methods=['POST'])
 def buy_action():
-    '''Function for buying an item'''
-    # pylint: disable=E1101
     if current_user.is_authenticated:
-        # request item via item_id
         item_id = request.form['item_id']
         item = Item.query.get(item_id)
+
         if item:
             # Check if the user has enough balance to purchase the item
             if current_user.balance >= item.price:
-                # Subtract the item's cost from the user's balance
-                current_user.balance -= int(item.price)
-                # Create a new purchase record
-                purchase = Purchase(
-                    buyer_id=current_user.id,
-                    seller_id=item.user_id,
-                    item_id=item.id,
-                    datetime=datetime.now(),
-                    cost_of_item=item.price
-                )
-                # add purchase to database
-                db.session.add(purchase)
-                db.session.commit()
-                # item_id is now the id of purchase user
-                item.user_id = current_user.id
-                db.session.commit()
-                flash('Item purchased successfully!', 'success')
+                # Start a database transaction
+                db.session.begin(subtransactions=True)
+
+                try:
+                    # Deduct the item's cost from the buyer's balance
+                    current_user.balance -= int(item.price)
+
+                    # Create a new purchase record
+                    purchase = Purchase(
+                        buyer_id=current_user.id,
+                        seller_id=item.user_id,
+                        item_id=item.id,
+                        datetime=datetime.now(),
+                        cost_of_item=item.price
+                    )
+
+                    # Update the item's owner
+                    item.user_id = current_user.id
+
+                    # Commit the changes to the database
+                    db.session.add(purchase)
+                    db.session.commit()
+
+                    # Add the item's cost to the old seller's balance
+                    seller = User.query.get(purchase.seller_id)
+                    seller.balance += int(item.price)
+
+                    db.session.commit()
+
+                    flash('Item purchased successfully!', 'success')
+                except Exception as e:
+                    # Handle any exceptions here
+                    db.session.rollback()
+                    flash('An error occurred during the purchase. Please try again.', 'error')
+                finally:
+                    db.session.close()
             else:
                 flash('Insufficient balance!', 'error')
         else:
-            time.sleep(2)
             flash('Item does not exist!', 'error')
+
         return redirect(url_for('home'))
     return redirect(url_for('product'))
 
