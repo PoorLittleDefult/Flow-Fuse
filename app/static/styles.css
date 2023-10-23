@@ -614,6 +614,11 @@ form .user-details .input-box{
   color: rgb(0, 0, 0);
 }
 
+.flashes{
+  position: absolute;
+  bottom: 0;
+}
+
 .flex-container{
   display: inline-flex;
 }

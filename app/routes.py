@@ -53,9 +53,8 @@ def product():
     )
 
 
-@app.route('/new-item', methods=['GET', 'POST'])
 def new_item():
-    '''Function for creating a new item that is added to database'''
+    '''Function for creating a new item that is added to the database'''
     # pylint: disable=E1101
     if request.method == 'POST':
         item_name = request.form['item_name']
@@ -63,19 +62,20 @@ def new_item():
         description = request.form['description']
         price = request.form['price']
         image_url = request.form['image_url']
-        item = Item(
-            item_name=item_name,
-            category=category,
-            description=description,
-            price=price,
-            image_url=image_url
-        )
-        # add item to database
-        db.session.add(item)
-        # link to user_id of person who created item
-        item.user_id = current_user.id
-        db.session.commit()
-        return redirect(url_for('product'))
+        if current_user.is_authenticated:
+            item = Item(
+                item_name=item_name,
+                category=category,
+                description=description,
+                price=price,
+                image_url=image_url
+            )
+            # Add the item to the database
+            db.session.add(item)
+            # Link it to the user_id of the person who created the item
+            item.user_id = current_user.id
+            db.session.commit()
+            return redirect(url_for('product'))
 
     return render_template('new_item.html')
 
